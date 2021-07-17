@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Test project</string>
+    <string name="send">send</string>
+    <string name="edit">edit</string>
+    <string name="speak">speak</string>
+    <string name="dir">跳转</string>
+    <string name="start">开始</string>
+    <string name="startRecord">开始录制</string>
+    <string name="startPlay">开始播放</string>
+</resources>
