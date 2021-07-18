@@ -10,6 +10,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -48,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 100);
         retrofit = new Retrofit.Builder()
                 .baseUrl("https://www.httpbin.org/") //设置网络请求的Url地址
                 .addConverterFactory(GsonConverterFactory.create()) //设置数据解析器
@@ -113,7 +115,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void dir(View view) {
-        startActivity(new Intent(this, MediaRecorderTest.class));
+        //startActivity(new Intent(this, MediaRecorderTest.class));
         //startActivity(new Intent(this,MainActivity2.class));
+        startActivity(new Intent(this,AudioRecordTest.class));
     }
 }
