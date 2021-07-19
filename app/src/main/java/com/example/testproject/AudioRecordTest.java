@@ -1,5 +1,6 @@
 package com.example.testproject;
 
+import android.content.pm.PackageManager;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
@@ -9,8 +10,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import java.io.BufferedOutputStream;
 import java.io.DataOutputStream;
@@ -21,6 +25,7 @@ import java.io.IOException;
 public class AudioRecordTest extends AppCompatActivity implements Runnable {
 
     private final static String TAG = "AudioRecordTest";
+
     private Button mBtnStartRecord,mBtnStopRecord;
 
     //指定音频源 这个和MediaRecorder是相同的 MediaRecorder.AudioSource.MIC指的是麦克风
@@ -39,7 +44,7 @@ public class AudioRecordTest extends AppCompatActivity implements Runnable {
     //指定缓冲区大小。调用AudioRecord类的getMinBufferSize方法可以获得。
     private int mBufferSizeInBytes;
 
-    private File mRecordingFile;//储存AudioRecord录下来的文件
+    private File mRecordingFile =new File(getExternalFilesDir(""), "audiorecordtest.pcm");;//储存AudioRecord录下来的文件
     private boolean isRecording = false; //true表示正在录音
     private AudioRecord mAudioRecord=null;
     private File mFileRoot=null;//文件目录
@@ -61,6 +66,8 @@ public class AudioRecordTest extends AppCompatActivity implements Runnable {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_audio_record_test);
 
+        ActivityCompat.requestPermissions(this, new String[]{android
+                .Manifest.permission.WRITE_EXTERNAL_STORAGE}, 10001);
 
         initDatas();
         initUI();
@@ -70,13 +77,16 @@ public class AudioRecordTest extends AppCompatActivity implements Runnable {
     //初始化数据
     private void initDatas() {
         mBufferSizeInBytes = AudioRecord.getMinBufferSize(mSampleRateInHz,mChannelConfig, mAudioFormat);//计算最小缓冲区
+
+        //创建AudioRecorder对象
         mAudioRecord = new AudioRecord(mAudioSource,mSampleRateInHz,mChannelConfig,
-                mAudioFormat, mBufferSizeInBytes);//创建AudioRecorder对象
+                mAudioFormat, mBufferSizeInBytes);
 
         mFileRoot = new File(mPathName);
         //mFileRoot = new File(getExternalFilesDir(""));
         if(!mFileRoot.exists()) {
-            boolean mkdirs = mFileRoot.mkdirs();//创建文件夹
+            //创建文件夹
+            mFileRoot.mkdirs();
         }
         Log.d(TAG,mFileRoot.getAbsolutePath());
 
@@ -86,6 +96,7 @@ public class AudioRecordTest extends AppCompatActivity implements Runnable {
     private void initUI() {
         mBtnStartRecord = findViewById(R.id.btn_start_record);
         mBtnStopRecord = findViewById(R.id.btn_stop_record);
+
         mBtnStartRecord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -104,6 +115,10 @@ public class AudioRecordTest extends AppCompatActivity implements Runnable {
     //开始录音
     public void startRecord() {
 
+        //如果当前正在录音，则直接返回
+        if(isRecording){
+            return;
+        }
         //AudioRecord.getMinBufferSize的参数是否支持当前的硬件设备
         if (AudioRecord.ERROR_BAD_VALUE == mBufferSizeInBytes || AudioRecord.ERROR == mBufferSizeInBytes) {
             throw new RuntimeException("Unable to getMinBufferSize");
@@ -112,7 +127,8 @@ public class AudioRecordTest extends AppCompatActivity implements Runnable {
             isRecording = true;
             if(mThread == null){
                 mThread = new Thread(this);
-                mThread.start();//开启线程
+                //开启线程
+                mThread.start();
             }
         }
     }
@@ -159,39 +175,55 @@ public class AudioRecordTest extends AppCompatActivity implements Runnable {
         //标记为开始采集状态
         isRecording = true;
         //创建一个流，存放从AudioRecord读取的数据
-        mRecordingFile = new File(mFileRoot,mFileName);
+        //mRecordingFile = new File(mFileRoot,mFileName);
 
-        Log.d(TAG,mRecordingFile.getAbsolutePath());
-        Log.d(TAG,mRecordingFile.getName());
+        mRecordingFile = new File(getExternalFilesDir(""), "audiorecordtest.pcm");
 
-        if(mRecordingFile.exists()){//音频文件保存过了删除
+        Log.d(TAG,mRecordingFile.exists()+"");
+        //音频文件保存过了删除
+
+
+        if(mRecordingFile.exists()){
             boolean delete = mRecordingFile.delete();
             if(!delete){
                 Log.d(TAG,"文件删除失败");
             }
         }
 
+
         try {
             boolean newFile = true;
-            Log.d(TAG,mRecordingFile.exists()+"");
+
             if(!mRecordingFile.exists()){
-                mRecordingFile = new File(mFileRoot,mFileName);
-                Log.d(TAG,"新建了文件"+mRecordingFile.getName());
+                //mRecordingFile = new File(mFileRoot,mFileName);
+                mRecordingFile = new File(getExternalFilesDir(""), "audiorecordtest.pcm");
             }
-            //newFile = mRecordingFile.createNewFile();//创建新文件
         } catch (Exception e) {
             e.printStackTrace();
             Log.e("lu","创建储存音频文件出错");
         }
 
+
         try {
             //获取到文件的数据流
-            mDataOutputStream = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(mRecordingFile)));
-            byte[] buffer = new byte[mBufferSizeInBytes];
+            byte[] buffer = null;
+            try {
+                if(!mRecordingFile.exists()){
+                    Log.d(TAG,"该文件不存在");
+                }
+                FileOutputStream fileOutputStream = new FileOutputStream(mRecordingFile);;
 
+                BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(fileOutputStream);
+                mDataOutputStream = new DataOutputStream(bufferedOutputStream);
+            }catch(Exception e){
+                Log.d(TAG,"数据流创建出错");
+                e.printStackTrace();
+            }
+            buffer = new byte[mBufferSizeInBytes];
 
             //判断AudioRecord未初始化，停止录音的时候释放了，状态就为STATE_UNINITIALIZED
             if(mAudioRecord.getState() == AudioRecord.STATE_UNINITIALIZED){
+                Log.d(TAG,"STATE_UNINITIALIZED");
                 initDatas();
             }
 
@@ -200,8 +232,7 @@ public class AudioRecordTest extends AppCompatActivity implements Runnable {
 
             while (isRecording && mAudioRecord.getRecordingState() == AudioRecord.RECORDSTATE_RECORDING) {
                 int bufferReadResult = mAudioRecord.read(buffer,0,mBufferSizeInBytes);
-                for (int i = 0; i < bufferReadResult; i++)
-                {
+                for (int i = 0; i < bufferReadResult; i++) {
                     mDataOutputStream.write(buffer[i]);
                 }
             }
@@ -215,6 +246,7 @@ public class AudioRecordTest extends AppCompatActivity implements Runnable {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        Log.d(TAG,"被销毁了");
         destroyThread();
         stopRecord();
     }
