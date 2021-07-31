@@ -2,14 +2,28 @@ plugins {
     id 'com.android.application'
 }
 
+repositories {
+    google()
+    maven {
+        url 'https://alphacephei.com/maven/'
+    }
+}
+
+
 android {
-    compileSdkVersion 30
-    buildToolsVersion "30.0.3"
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+
+    compileSdkVersion 29
+
 
     defaultConfig {
         applicationId "com.example.testproject"
-        minSdkVersion 29
-        targetSdkVersion 30
+        minSdkVersion 21
+        targetSdkVersion 29
         versionCode 1
         versionName "1.0"
 
@@ -41,16 +55,20 @@ android {
 
 dependencies {
 
+    implementation 'net.java.dev.jna:jna:5.8.0@aar'
+    implementation 'com.github.microshow:RxFFmpeg:4.9.0'
+    implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'com.google.android.material:material:1.2.1'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
-    testImplementation 'junit:junit:4.+'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-
+    implementation group: 'com.alphacephei', name: 'vosk-android', version: '0.3.23'
     implementation("com.squareup.okhttp3:okhttp:4.9.0")
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
 
+    implementation (name: 'vosk',ext:'aar')
+    //implementation (name: 'models-debug',ext:'aar')
+    //implementation (name: 'app-debug',ext:'aar')
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'com.google.android.material:material:1.2.1'
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     implementation 'com.squareup.retrofit2:adapter-rxjava3:2.9.0'

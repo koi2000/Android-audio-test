@@ -36,6 +36,7 @@ public class MainActivity2 extends AppCompatActivity implements View.OnClickList
         btn_opt = findViewById(R.id.btn_opt);
 
         btn_opt.setOnClickListener(this);
+
     }
 
     @Override

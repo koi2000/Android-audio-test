@@ -117,6 +117,6 @@ public class MainActivity extends AppCompatActivity {
     public void dir(View view) {
         //startActivity(new Intent(this, MediaRecorderTest.class));
         //startActivity(new Intent(this,MainActivity2.class));
-        startActivity(new Intent(this,AudioRecordTest.class));
+        startActivity(new Intent(this,MainActivity3.class));
     }
 }

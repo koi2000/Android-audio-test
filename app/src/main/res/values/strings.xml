@@ -8,4 +8,5 @@
     <string name="startRecord">开始录制</string>
     <string name="startPlay">开始播放</string>
     <string name="stopRecord">停止录制</string>
+    <string name="startRe">StartRecord</string>
 </resources>
