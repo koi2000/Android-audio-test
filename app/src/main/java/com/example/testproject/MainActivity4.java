@@ -152,6 +152,7 @@ public class MainActivity4 extends Activity {
         recognizer =new Recognizer(MainActivity4.this,"Injuries are part of everyday life, from a scratch on the skin to a broken bone to a fatal trauma.Although many injuries are accidental, others can arise as a consequence of an individual's or a group's behaviour, activity or social norms characteristics that tell us about societies and the inherent tensions and risks within and between different groups.On page six eighty six, Beieretal. provide evidence that challenges the longstanding view that Neanderthal populations experienced a level of traumatic injuries that was significantly higher than that of humans.The result calls into question claims that the behaviour and technologies of Neanderthals exposed them to particularly high levels of risk and danger.",
                 wavFileName);
 
+        recognizer.build();
         System.out.println(recognizer.getScore());
         Log.d(TAG,"分数为"+recognizer.getScore());
 
