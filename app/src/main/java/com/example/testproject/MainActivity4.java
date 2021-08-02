@@ -1,11 +1,13 @@
 package com.example.testproject;
 
+import org.jetbrains.annotations.NotNull;
 import org.vosk.demo.Recognizer;
 import org.vosk.demo.Utils.Pcm2WavUtil;
 import org.vosk.demo.Utils.RecordUtils;
 import org.vosk.demo.Utils.move;
 import org.vosk.demo.entity.partialResult;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -21,8 +23,11 @@ import android.media.MediaRecorder;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -147,15 +152,22 @@ public class MainActivity4 extends Activity {
             audioRecord = null;
         }
         Pcm2WavUtil.pcmToWav(AUDIO_SAMPLE_RATE,AUDIO_CHANNEL,recordBufSize,pcmFileName,wavFileName);
+    }
 
-
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void check(){
         recognizer =new Recognizer(MainActivity4.this,"Injuries are part of everyday life, from a scratch on the skin to a broken bone to a fatal trauma.Although many injuries are accidental, others can arise as a consequence of an individual's or a group's behaviour, activity or social norms characteristics that tell us about societies and the inherent tensions and risks within and between different groups.On page six eighty six, Beieretal. provide evidence that challenges the longstanding view that Neanderthal populations experienced a level of traumatic injuries that was significantly higher than that of humans.The result calls into question claims that the behaviour and technologies of Neanderthals exposed them to particularly high levels of risk and danger.",
                 wavFileName);
 
-        recognizer.build();
-        System.out.println(recognizer.getScore());
+        //System.out.println(recognizer.getScore());
+        recognizer.initModel();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                recognizer.build();
+            }
+        }).start();
         Log.d(TAG,"分数为"+recognizer.getScore());
-
     }
 
     public void startRecord(){
@@ -203,5 +215,10 @@ public class MainActivity4 extends Activity {
                 }
             }
         }).start();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void check(View view) {
+        check();
     }
 }
