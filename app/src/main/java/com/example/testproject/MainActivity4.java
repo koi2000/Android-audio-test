@@ -81,6 +81,8 @@ public class MainActivity4 extends Activity {
     private byte[] buffer;
     private boolean isRecording;
     private Recognizer recognizer;
+    private int score = 0;
+
 
     private final String[] permissions = new String[]{
             Manifest.permission.RECORD_AUDIO,
@@ -159,15 +161,28 @@ public class MainActivity4 extends Activity {
         recognizer =new Recognizer(MainActivity4.this,"Injuries are part of everyday life, from a scratch on the skin to a broken bone to a fatal trauma.Although many injuries are accidental, others can arise as a consequence of an individual's or a group's behaviour, activity or social norms characteristics that tell us about societies and the inherent tensions and risks within and between different groups.On page six eighty six, Beieretal. provide evidence that challenges the longstanding view that Neanderthal populations experienced a level of traumatic injuries that was significantly higher than that of humans.The result calls into question claims that the behaviour and technologies of Neanderthals exposed them to particularly high levels of risk and danger.",
                 wavFileName);
 
+        @SuppressLint("HandlerLeak") Handler handler = new Handler(){
+            @SuppressLint("HandlerLeak")
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                //判断标志位
+                if (msg.what == 1) {
+                    System.out.println("分数为"+msg.obj);
+                    score = (Integer) msg.obj;
+                    System.out.println("分数为啥"+score);
+                }
+            }
+        };
+
         //System.out.println(recognizer.getScore());
         recognizer.initModel();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                recognizer.build();
-            }
-        }).start();
-        Log.d(TAG,"分数为"+recognizer.getScore());
+        recognizer.build(handler);
+        seeScore();
+    }
+
+    private void seeScore(){
+        System.out.println("看看分数为"+score);
     }
 
     public void startRecord(){
