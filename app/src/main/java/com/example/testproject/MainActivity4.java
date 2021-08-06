@@ -44,27 +44,7 @@ public class MainActivity4 extends Activity {
     private static final int PERMISSIONS_REQUEST_RECORD_AUDIO = 1;
     private static final String TAG = "MainActivity4";
 
-
-    private TextView resultView;
-
-    //当前需要判断的句子的原文
-    private String sentence;
-    private List<String> sentence_splited; //会在check方法中更新
-
-    private StringBuilder sentence_read = new StringBuilder(); //需手动更新
-
-    private List<partialResult>partialResults;
-    private List<Double>confs;//需手动更新
-    private List<String>words;//需手动更新
-    //存储转换后的句子，符合模型的要求
-    private String grammer;
-
-    //获取麦克风
-    private MediaRecorder mediaRecorder;
-    private RecordUtils recordUtils;
-    //设置文件保存位置
-    File file;
-
+    TextView resultView;
     //控件
     Button btn_mic;
 
@@ -171,6 +151,7 @@ public class MainActivity4 extends Activity {
                     System.out.println("分数为"+msg.obj);
                     score = (Integer) msg.obj;
                     System.out.println("分数为啥"+score);
+                    resultView.append(""+score);
                 }
             }
         };
