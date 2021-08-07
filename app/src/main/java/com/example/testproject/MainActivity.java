@@ -1,4 +1,5 @@
-package com.example.testproject;
+
+/*package com.example.testproject;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -43,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
     // t：译文内容类型，日语取 ja，中文取 zh，英语取 en，韩语取 ko，德语取 de，西班牙语取 es，法语取 fr，自动则取 auto
     // w：查询内容
 
-    */
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -120,3 +121,5 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(this,MainActivity3.class));
     }
 }
+
+ */

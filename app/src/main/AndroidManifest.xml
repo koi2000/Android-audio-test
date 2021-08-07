@@ -13,7 +13,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
 
     <application
-        android:allowBackup="false"
+        android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:requestLegacyExternalStorage="true"
@@ -21,12 +21,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TestProject">
 
-        <activity android:name=".MainActivity" />
-        <activity android:name=".MainActivity3" />
-        <activity android:name=".AudioRecordTest_02" />
-        <activity android:name=".AudioRecordTest" />
-        <activity android:name=".MediaRecorderTest" />
-        <activity android:name=".MainActivity2" />
+
         <activity android:name=".MainActivity4">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -3,9 +3,7 @@ package com.example.testproject;
 import org.jetbrains.annotations.NotNull;
 import org.vosk.demo.Recognizer;
 import org.vosk.demo.Utils.Pcm2WavUtil;
-import org.vosk.demo.Utils.RecordUtils;
-import org.vosk.demo.Utils.move;
-import org.vosk.demo.entity.partialResult;
+
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -133,7 +131,8 @@ public class MainActivity4 extends Activity {
             audioRecord.release();
             audioRecord = null;
         }
-        Pcm2WavUtil.pcmToWav(AUDIO_SAMPLE_RATE,AUDIO_CHANNEL,recordBufSize,pcmFileName,wavFileName);
+        Pcm2WavUtil.a(AUDIO_SAMPLE_RATE,AUDIO_CHANNEL,recordBufSize,pcmFileName,wavFileName);
+        check();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -150,15 +149,15 @@ public class MainActivity4 extends Activity {
                 if (msg.what == 1) {
                     System.out.println("分数为"+msg.obj);
                     score = (Integer) msg.obj;
-                    System.out.println("分数为啥"+score);
-                    resultView.append(""+score);
                 }
             }
         };
 
         //System.out.println(recognizer.getScore());
-        recognizer.initModel();
-        recognizer.build(handler);
+        recognizer.b();
+        recognizer.a(handler);
+        //recognizer.initModel();
+        //recognizer.build(handler);
         seeScore();
     }
 
@@ -213,8 +212,4 @@ public class MainActivity4 extends Activity {
         }).start();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    public void check(View view) {
-        check();
-    }
 }

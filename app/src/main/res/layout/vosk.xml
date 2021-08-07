@@ -17,13 +17,15 @@
         android:text="@string/startRe"/>
 
 
+
+
+    <!--
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="check"
         android:onClick="check"/>
 
-    <!--
     <ToggleButton
         android:id="@+id/pause"
         android:layout_width="match_parent"
