@@ -63,6 +63,7 @@ dependencies {
 
     implementation (name: 'vosk',ext:'aar')
 
+    implementation 'com.google.code.gson:gson:2.8.6'
     //implementation (name: 'models-debug',ext:'aar')
     //implementation (name: 'app-debug',ext:'aar')
     implementation 'androidx.constraintlayout:constraintlayout:2.0.1'

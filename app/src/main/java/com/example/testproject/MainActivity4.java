@@ -2,7 +2,6 @@ package com.example.testproject;
 
 import org.jetbrains.annotations.NotNull;
 import org.vosk.demo.Recognizer;
-import org.vosk.demo.Utils.Pcm2WavUtil;
 
 
 import androidx.annotation.NonNull;
@@ -48,12 +47,12 @@ public class MainActivity4 extends Activity {
 
 
     private final static int AUDIO_INPUT = MediaRecorder.AudioSource.MIC;
-    private final static int AUDIO_SAMPLE_RATE = 44100;
+    private final static int AUDIO_SAMPLE_RATE = 16000;
     private final static int AUDIO_CHANNEL = AudioFormat.CHANNEL_IN_MONO;
     private final static int AUDIO_ENCODING = AudioFormat.ENCODING_PCM_16BIT;
 
-    private  String pcmFileName ;
-    private  String wavFileName ;
+    private  String pcmFileName;
+    private  String wavFileName;
     private AudioRecord audioRecord = null;  // 声明 AudioRecord 对象
     private int recordBufSize = 0; // 声明recoordBufffer的大小字段
     private byte[] buffer;
@@ -79,6 +78,7 @@ public class MainActivity4 extends Activity {
 
         // Setup layout
         resultView = findViewById(org.vosk.demo.R.id.result_text);
+
 
         //findViewById(org.vosk.demo.R.id.recognize_file).setOnClickListener(view -> recognizeFile());
 
@@ -131,7 +131,8 @@ public class MainActivity4 extends Activity {
             audioRecord.release();
             audioRecord = null;
         }
-        Pcm2WavUtil.a(AUDIO_SAMPLE_RATE,AUDIO_CHANNEL,recordBufSize,pcmFileName,wavFileName);
+
+        Pcm2WavUtil.pcmToWav(AUDIO_SAMPLE_RATE,AUDIO_CHANNEL,recordBufSize,pcmFileName,wavFileName);
         check();
     }
 
@@ -148,16 +149,28 @@ public class MainActivity4 extends Activity {
                 //判断标志位
                 if (msg.what == 1) {
                     System.out.println("分数为"+msg.obj);
-                    score = (Integer) msg.obj;
+                    //score = (Integer) msg.obj;
                 }
             }
         };
 
         //System.out.println(recognizer.getScore());
-        recognizer.b();
-        recognizer.a(handler);
-        //recognizer.initModel();
-        //recognizer.build(handler);
+        //recognizer.b();
+        //recognizer.a(handler);
+
+
+        try {
+            //recognizer.initModel();
+            recognizer.b();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            //recognizer.build(handler);
+            recognizer.a(handler);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         seeScore();
     }
 
