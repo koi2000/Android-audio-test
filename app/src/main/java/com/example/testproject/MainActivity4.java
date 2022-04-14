@@ -138,8 +138,7 @@ public class MainActivity4 extends Activity {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void check(){
-        recognizer =new Recognizer(MainActivity4.this,"Injuries are part of everyday life, from a scratch on the skin to a broken bone to a fatal trauma.Although many injuries are accidental, others can arise as a consequence of an individual's or a group's behaviour, activity or social norms characteristics that tell us about societies and the inherent tensions and risks within and between different groups.On page six eighty six, Beieretal. provide evidence that challenges the longstanding view that Neanderthal populations experienced a level of traumatic injuries that was significantly higher than that of humans.The result calls into question claims that the behaviour and technologies of Neanderthals exposed them to particularly high levels of risk and danger.",
-                wavFileName);
+        recognizer =new Recognizer(MainActivity4.this,"This morning is cool.I am going to play basketball.After play basketball,I feel tired,but I am very happy.Because basketball is my favourite sport.My body is strong.I hope you like basketball too.",wavFileName);
 
         @SuppressLint("HandlerLeak") Handler handler = new Handler(){
             @SuppressLint("HandlerLeak")
@@ -205,7 +204,6 @@ public class MainActivity4 extends Activity {
             if (null != os) {
                 while (isRecording) {
                     int read = audioRecord.read(buffer, 0, recordBufSize);
-
                     // 如果读取音频数据没有出现错误，就将数据写入到文件
                     if (AudioRecord.ERROR_INVALID_OPERATION != read) {
                         try {
